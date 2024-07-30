@@ -114,36 +114,36 @@ async function createDoc(user) {
     setLoading(false);
   }  
 }
-function googleAuth(){
- setLoading(true);
- try {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      createDoc(user);
-      setLoading(false);
-      navigate("/dashboard")
-      toast.success("User Authenticated!");
+const googleAuth = (e)=>{
+  e.preventDefault()
+  console.log("google button clicked")
+  try{
+    
+    signInWithPopup(auth, provider)
+.then((result) => {
+  // This gives you a Google Access Token. You can use it to access the Google API.
+  const credential = GoogleAuthProvider.credentialFromResult(result);
+  const token = credential.accessToken;
+  // The signed-in user info.
+  const user = result.user;
+  navigate('/dashboard')
+  console.log('user->',user)
+  toast.success('User authenticated!');
+}).catch((error) => {
+  // Handle Errors here.
+  const errorCode = error.code;
+  const errorMessage = error.message;
+  // The email of the user's account used.
+  const email = error.customData.email;
+  // The AuthCredential type that was used.
+  const credential = GoogleAuthProvider.credentialFromError(error);
+  toast.error(errorMessage)
+});
+  }catch (e){
+    toast.error(e)
+  }
 
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      toast.error(errorMessage);
-      setLoading(false);
-      // The email of the user's account used.
 
-    });
- } catch (e) {
-  toast.error(e.message)
-  setLoading(false);
- }
   
   
 }
